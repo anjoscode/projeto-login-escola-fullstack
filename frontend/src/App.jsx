@@ -1,18 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-// 1. Componente Painel Principal
 function PainelPrincipal({ usuario }) {
+  // Função para deslogar e recarregar a página
+  const handleLogout = () => {
+    window.location.reload(); 
+  };
+
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
-      <h1>Bem-vindo, {usuario.nome}!</h1>
-      <p>Você está logado como: {usuario.perfil}</p>
-      {usuario.perfil === 'Professor' ? (
-        <button>Lançar Notas</button>
-      ) : (
-        <button>Acessar Minhas Aulas</button>
-      )}
+    <div className="wrapper">
+      <div className="container" style={{ textAlign: 'center' }}>
+        <h1 style={{ marginBottom: '10px' }}>Bem-vindo, {usuario.nome}!</h1>
+        
+        <p style={{ color: '#94a3b8', marginBottom: '30px' }}>
+          Você está logado como: <strong>{usuario.perfil}</strong>
+        </p>
+
+        {/* Botão condicional conforme a regra de negócio */}
+        <button className="btn-acao" style={{ marginBottom: '10px' }}>
+          {usuario.perfil === 'Professor' ? 'Lançar Notas' : 'Acessar Minhas Aulas'}
+        </button>
+
+        {/* Botão de Sair adicionado */}
+        <button className="btn-sair" onClick={handleLogout}>
+          Sair do sistema
+        </button>
+      </div>
     </div>
   );
 }
@@ -22,61 +36,129 @@ function App() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [perfil, setPerfil] = useState('Aluno');
+
   const [usuarioLogado, setUsuarioLogado] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
-  const [erroMensagem, setErroMensagem] = useState(''); // Novo state para o erro
+
+  const [erroMensagem, setErroMensagem] = useState('');
+  const [sucessoMensagem, setSucessoMensagem] = useState('');
+
+  useEffect(() => {
+    if (sucessoMensagem) {
+      const timer = setTimeout(() => {
+        setSucessoMensagem('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [sucessoMensagem]);
+
+  useEffect(() => {
+    if (erroMensagem) {
+      const timer = setTimeout(() => {
+        setErroMensagem('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [erroMensagem]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErroMensagem(''); // Limpa o erro ao tentar novamente
+    setErroMensagem('');
+    setSucessoMensagem('');
+
     const rota = isLogin ? '/login' : '/cadastro';
 
     try {
-      const resposta = await axios.post(`http://localhost:3001${rota}`, {
-        nome, email, senha, perfil
-      });
-      
+      const resposta = await axios.post(
+        `http://localhost:3001${rota}`,
+        {
+          nome,
+          email,
+          senha,
+          perfil,
+        }
+      );
+
       if (isLogin) {
         setUsuarioLogado(resposta.data.usuario);
       } else {
-        alert("Cadastro realizado com sucesso!");
+        setSucessoMensagem('Cadastro realizado com sucesso!');
         setIsLogin(true);
+        setNome('');
+        setEmail('');
+        setSenha('');
       }
     } catch (erro) {
-      // Substituído o alert pela atualização do state
-      setErroMensagem(erro.response?.data?.mensagem || 'Erro ao conectar com o servidor.');
+      setErroMensagem(
+        erro.response?.data?.mensagem ||
+          'Erro ao conectar com o servidor.'
+      );
     }
   };
 
-  if (usuarioLogado) return <PainelPrincipal usuario={usuarioLogado} />;
+  if (usuarioLogado) {
+    return <PainelPrincipal usuario={usuarioLogado} />;
+  }
 
   return (
-    <div className="container" style={{ padding: '20px', maxWidth: '300px', margin: 'auto' }}>
-      <h1>{isLogin ? 'Login' : 'Cadastro'}</h1>
-      
-      {/* Exibição da mensagem de erro clara */}
-      {erroMensagem && <div className="erro">{erroMensagem}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        {!isLogin && (
-          <input type="text" placeholder="Nome" required onChange={(e) => setNome(e.target.value)} style={{ display: 'block', width: '100%', marginBottom: '10px' }} />
-        )}
-        <input type="email" placeholder="E-mail" required onChange={(e) => setEmail(e.target.value)} style={{ display: 'block', width: '100%', marginBottom: '10px' }} />
-        <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)} style={{ display: 'block', width: '100%', marginBottom: '10px' }} />
-        
-        {!isLogin && (
-          <select onChange={(e) => setPerfil(e.target.value)} style={{ width: '100%', marginBottom: '10px' }}>
-            <option value="Aluno">Aluno</option>
-            <option value="Professor">Professor</option>
-          </select>
-        )}
+    <div className="wrapper">
+      <div style={{ textAlign: 'center', color: '#fff' }}>
+        <img src="/logo.png" alt="EduConnect" className="logo" />
+        <h1 style={{ fontSize: '52px', fontWeight: '800', margin: 0 }}>EduConnect</h1>
+        <p style={{ color: '#94a3b8', fontSize: '1.1rem', marginTop: '5px' }}>
+          Plataforma Educacional
+        </p>
+      </div>
 
-        <button type="submit" style={{ width: '100%' }}>{isLogin ? 'Entrar' : 'Cadastrar'}</button>
-      </form>
+      <div className="container">
+        <h1>{isLogin ? 'Login' : 'Cadastro'}</h1>
 
-      <p style={{ textAlign: 'center' }}>
-        <button onClick={() => setIsLogin(!isLogin)}>{isLogin ? 'Cadastre-se' : 'Faça Login'}</button>
-      </p>
+        {erroMensagem && <div className="erro">{erroMensagem}</div>}
+        {sucessoMensagem && <div className="sucesso">{sucessoMensagem}</div>}
+
+        <form onSubmit={handleSubmit}>
+          {!isLogin && (
+            <input
+              type="text"
+              placeholder="Nome"
+              required
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          )}
+
+          <input
+            type="email"
+            placeholder="E-mail"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            required
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+
+          {!isLogin && (
+            <select value={perfil} onChange={(e) => setPerfil(e.target.value)}>
+              <option value="Aluno">Aluno</option>
+              <option value="Professor">Professor</option>
+            </select>
+          )}
+
+          <button type="submit">
+            {isLogin ? 'Entrar' : 'Cadastrar'}
+          </button>
+        </form>
+
+        <button className="cadastro" onClick={() => setIsLogin(!isLogin)}>
+          {isLogin ? 'Cadastre-se' : 'Faça Login'}
+        </button>
+      </div>
     </div>
   );
 }
