@@ -1,223 +1,217 @@
+/* ==========================================================================
+   RESET & LAYOUT GERAL
+   ========================================================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+body {
+  background-color: #0f172a;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
 .wrapper {
   width: 100%;
   min-height: 100vh;
-
   display: flex;
   flex-direction: column;
-
   justify-content: center;
   align-items: center;
-
   gap: 20px;
-
   padding: 30px 20px;
 }
 
+/* ==========================================================================
+   COMPONENTES (Logo e Container)
+   ========================================================================== */
 .logo {
-  width: 900px;
+  width: 250px;
   height: 90px;
-
   object-fit: contain;
-
   margin-bottom: 0.5px;
-
-  filter:
-    drop-shadow(0 0 10px rgba(59, 130, 246, 0.6))
-    drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
-
-  transition: transform 0.3s ease;
-}
-
-.logo:hover {
-  transform: scale(1.05);
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6))
+          drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
 }
 
 .container {
   width: 500px;
   max-width: 90%;
-
   padding: 35px;
-
   background: rgba(255, 255, 255, 0.08);
-
   backdrop-filter: blur(12px);
-
   border: 1px solid rgba(255, 255, 255, 0.12);
-
   border-radius: 28px;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.35);
-
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   text-align: center;
 }
 
 .container h1 {
   color: white;
-
-  font-size: 42px;
-
-  margin-bottom: 25px;
-
+  font-size: 28px;
+  margin-bottom: 30px;
   font-weight: 700;
 }
 
-input,
-select {
+/* ==========================================================================
+   INPUTS, LABELS E ÍCONES
+   ========================================================================== */
+.input-group {
+  margin-bottom: 30px; /* Respiro extra aplicado */
+  text-align: left;
   width: 100%;
+}
 
-  padding: 15px;
+.input-group label {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
 
-  margin-bottom: 15px;
+.input-wrapper, 
+.senha-wrapper {
+  position: relative;
+  width: 100%;
+}
 
+input {
+  width: 100%;
+  padding: 15px 45px;
   border: none;
-
   border-radius: 14px;
-
-  background: rgba(255, 255, 255, 0.12);
-
+  background: rgba(0, 0, 0, 0.2);
   color: white;
-
   font-size: 16px;
+  outline: none;
 }
 
 input::placeholder {
-  color: rgba(255, 255, 255, 0.55);
+  color: #94a3b8;
 }
 
-input:focus,
-select:focus {
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #94a3b8;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ==========================================================================
+   CAMPO DE SENHA
+   ========================================================================== */
+.senha-wrapper input {
+  padding-right: 50px;
+}
+
+.senha-toggle {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* ==========================================================================
+   SELETORES
+   ========================================================================== */
+.perfil-selector {
+  display: flex;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 15px;
+}
+
+.segment-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent !important;
+  color: #94a3b8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segment-btn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.segment-btn.active {
+  background: #3b82f6 !important;
+  color: #ffffff;
+}
+
+.select-perfil {
+  width: 100%;
+  padding: 15px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
   outline: none;
-
-  background: rgba(255, 255, 255, 0.18);
-
-  box-shadow:
-    0 0 0 2px #3b82f6,
-    0 0 10px rgba(59, 130, 246, 0.25);
 }
 
-/* Estilo das opções do select */
-select option {
-  background-color: #1e293b; /* fundo escuro */
-  color: white;              /* texto branco */
-  padding: 10px;
-}
-
-/* Hover nas opções */
-select option:hover {
-  background-color: #3b82f6; /* azul ao passar o mouse */
+.select-perfil option {
+  background: #0f172a;
   color: #fff;
 }
 
-button {
+/* ==========================================================================
+   BOTÕES E MENSAGENS
+   ========================================================================== */
+button:not(.segment-btn):not(.senha-toggle) {
   width: 100%;
-
   padding: 15px;
-
   margin-top: 10px;
-
   border: none;
-
   border-radius: 14px;
-
   background: #3b82f6;
-
   color: white;
-
   font-size: 17px;
-
   font-weight: 600;
-
   cursor: pointer;
-
   transition: 0.3s;
 }
 
-button:hover {
+button:not(.segment-btn):not(.senha-toggle):hover {
   background: #2563eb;
 }
 
-.cadastro {
-  background: transparent;
+.erro { background: rgba(220, 38, 38, 0.15); color: #fca5a5; padding: 12px; margin-bottom: 15px; border-radius: 12px; }
+.sucesso { background: rgba(22, 163, 74, 0.15); color: #86efac; padding: 12px; margin-bottom: 15px; border-radius: 12px; }
 
-  border: 2px solid #3b82f6;
-}
-
-.cadastro:hover {
-  background: rgba(59, 130, 246, 0.08);
-}
-
-.erro {
-  background: rgba(220, 38, 38, 0.15);
-
-  color: #fca5a5;
-
-  padding: 12px;
-
-  margin-bottom: 15px;
-
-  border-radius: 12px;
-
-  border: 1px solid rgba(220, 38, 38, 0.35);
-}
-
-.sucesso {
-  background: rgba(22, 163, 74, 0.15);
-
-  color: #86efac;
-
-  padding: 12px;
-
-  margin-bottom: 15px;
-
-  border-radius: 12px;
-
-  border: 1px solid rgba(22, 163, 74, 0.35);
-}
-
-@media (max-width: 768px) {
-  .container {
-    width: 92%;
-    padding: 25px;
-  }
-
-  .container h1 {
-    font-size: 34px;
-  }
-
-  .logo {
-    width: 90px;
-    height: 90px;
-  }
-}
-
-.btn-acao {
-  width: 100%;
-  padding: 12px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-sair {
-  width: 100%;
-  padding: 10px;
-  background: transparent;
+/* ==========================================================================
+   LINK DE NAVEGAÇÃO
+   ========================================================================== */
+.auth-link {
+  margin-top: 20px;
   color: #94a3b8;
-  border: 1px solid #475569;
-  border-radius: 8px;
   cursor: pointer;
+  font-size: 0.95rem;
 }
 
-.btn-sair:hover {
-  background-color: #1e293b;
+.auth-link span {
+  color: #3b82f6;
+  font-weight: bold;
+  text-decoration: underline;
 }
+
+.btn-acao { background: #3b82f6; color: white; border-radius: 8px; margin-top: 10px; }
+.btn-sair { background: transparent; color: #94a3b8; border: 1px solid #475569; border-radius: 8px; margin-top: 10px; }
